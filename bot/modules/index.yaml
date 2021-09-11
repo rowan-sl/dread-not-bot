@@ -1,0 +1,10 @@
+#modules must be named "<name>_cogg.py" where <name> is what u put here and _cogg is because dredark is made by cogg
+modules:
+  - test
+  - debug
+  - builtin
+  - math
+  - iteminfo
+  - lol
+  - oracle
+  - tag

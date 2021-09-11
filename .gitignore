@@ -1,0 +1,7 @@
+logs/*
+!**/.filler
+config/conf.py
+database/main.sqlite
+.vscode
+.venv
+**/__pycache__
