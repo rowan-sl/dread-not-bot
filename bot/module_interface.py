@@ -48,10 +48,7 @@ class ModuleController:
             self.instances.append(Cogg())
         self.logger.detail(str(self.instances))
         self.logger.detail(str(coggs))
-        
-    
-    def _load_module_bin(filepath: str):
-        pass
+
     
     def interpet(self, author, content) -> bool:
         self.logger.detail("running check")
