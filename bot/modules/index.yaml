@@ -8,5 +8,21 @@ modules:
   - lol
   - oracle
   - tag
-#in teh bin dir, go modules that have been serialized with dill and compressed w/ gzip
+#in the bin dir, go modules that have been serialized with dill and compressed w/ gzip
 bin_modules:
+  # - debug
+  # - builtin
+  # - math
+  # - iteminfo
+  # - lol
+  # - oracle
+  # - tag
+#names of all modules that are theere, to generate bin modules off of
+modules_gen:
+  - debug
+  - builtin
+  - math
+  - iteminfo
+  - lol
+  - oracle
+  - tag
