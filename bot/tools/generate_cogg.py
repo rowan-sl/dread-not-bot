@@ -8,16 +8,16 @@ main_path = str(cwd_path.parents[2])
 sys.path.append(main_path)
 
 #import thing to compress here
-from bot.modules.builtin_cogg import BuiltinCogg
+from bot.modules.tag_cogg import TagCogg
 
-bitez = dill.dumps(BuiltinCogg, byref=True)
+bitez = dill.dumps(TagCogg, byref=True)
 squashed_bitez = gzip.compress(bitez, 9)
-with pathlib.Path(main_path, "bot", "modules", "bin", "builtin.cogg.bin").open("wb") as f:
+with pathlib.Path(main_path, "bot", "modules", "bin", "tag.cogg.bin").open("wb") as f:
     f.write(squashed_bitez)
 
-with pathlib.Path(main_path, "bot", "modules", "bin", "builtin.cogg.bin").open("rb") as f:
-    squashed_bitez = f.read()
-    bitez = gzip.decompress(squashed_bitez)
-    cogg = dill.loads(bitez)
-instance = cogg()
-instance.check()
+# with pathlib.Path(main_path, "bot", "modules", "bin", "builtin.cogg.bin").open("rb") as f:
+#     squashed_bitez = f.read()
+#     bitez = gzip.decompress(squashed_bitez)
+#     cogg = dill.loads(bitez)
+# instance = cogg()
+# instance.check()

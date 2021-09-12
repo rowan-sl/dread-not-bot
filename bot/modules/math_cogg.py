@@ -1,6 +1,6 @@
 class MathCogg:
     from queue import Queue
-    from lib.evaluate_str import evalueatestr
+    from bot.lib.evaluate_str import evalueatestr
 
     def check(self, author, content, chat_queue: Queue, logger):
         if content.startswith("eval "):
