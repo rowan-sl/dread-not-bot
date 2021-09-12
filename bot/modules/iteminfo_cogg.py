@@ -31,8 +31,10 @@ class ItemInfoCogg:
                     return True
                 else:
                     chat_queue.put(f"Please be more spacific - there are {len(poss_meanings)} items that include {item_name}")
+                    return True
             else:
                 chat_queue.put("that item does not exist!")
+                return True
             return False
 
 module_coggs = [ItemInfoCogg]

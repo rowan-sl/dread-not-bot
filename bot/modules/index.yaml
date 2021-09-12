@@ -1,15 +1,6 @@
 #modules must be named "<name>_cogg.py" where <name> is what u put here and _cogg is because dredark is made by cogg
 # make shure one module is not bolth lists
 modules:
-  - debug
-  - builtin
-  - math
-  - iteminfo
-  - lol
-  - oracle
-  - tag
-#in the bin dir, go modules that have been serialized with dill and compressed w/ gzip
-bin_modules:
   # - debug
   # - builtin
   # - math
@@ -17,6 +8,17 @@ bin_modules:
   # - lol
   # - oracle
   # - tag
+  # - random
+#in the bin dir, go modules that have been serialized with dill and compressed w/ gzip
+bin_modules:
+  - debug
+  - builtin
+  - math
+  - iteminfo
+  - lol
+  - oracle
+  - tag
+  - random
 #names of all modules that are theere, to generate bin modules off of
 modules_gen:
   - debug
@@ -26,3 +28,4 @@ modules_gen:
   - lol
   - oracle
   - tag
+  - random

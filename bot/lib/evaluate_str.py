@@ -2,7 +2,7 @@ import numexpr as ne
 import re
 from collections import Counter as count
 
-def evalueatestr(expr):
+def evalueatestr(e, expr):# e is there to fix a bug
     expr = str(expr)
     for i in ["__import__", "import", "os", "rm", "sys", "importlib", "__builtins__", "\"", "\'", "subprocess", "eval", "exec"]:
         if i in expr:
@@ -15,7 +15,7 @@ def evalueatestr(expr):
     result = None
     try:
         result = ne.evaluate(str(expr), local_dict={}, global_dict={}).item()
-    except KeyError as e:
+    except KeyError or SyntaxWarning as e:
         pass
     finally:
         return result

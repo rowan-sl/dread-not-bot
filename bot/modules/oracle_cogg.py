@@ -36,6 +36,6 @@ class OracleCogg:
     def check(self, author, content, chat_queue: Queue, logger):
         if content.startswith("8ball"):
             chat_queue.put(self.random.choice(self.eightballanswers))
-            return
+            return True
 
 module_coggs = [OracleCogg]
