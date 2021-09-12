@@ -152,6 +152,7 @@ def deal_with_message(msg):
                         driver.close()
                         logger.info("exiting")
                         sys.exit(10)
+                logger.debug("running interpret")
                 sucsess = mc.interpet(author, content)
                 if not sucsess:
                     chat_queue.put("Unknown command")
