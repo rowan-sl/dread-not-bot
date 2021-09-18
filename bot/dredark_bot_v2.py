@@ -14,7 +14,7 @@ from lib.customlog import CustomLoggerLevels
 logging.setLoggerClass(CustomLoggerLevels)
 logging.basicConfig(
     filename=log_path,
-    level=15,#detail level
+    level=logging.INFO,#detail level
     format="[%(asctime)s] %(name)s/%(module)s/%(levelname)s: %(message)s",
     datefmt="%H:%M:%S",
 )
@@ -40,6 +40,7 @@ import re
 import sys
 import time
 import threading, queue
+import json
 #installed modules
 
 #other files
@@ -57,6 +58,15 @@ time.sleep(1)
 input("press enter once you have selected a ship")
 
 chat_queue = queue.Queue()
+
+banned_path = pathlib.Path(main_path, "database", "banned.json")
+flag_path = pathlib.Path(main_path, "database", "flags.json")
+
+with banned_path.open("r") as f:
+    banned = json.load(f)
+
+with flag_path.open("r") as f:
+    flags = json.load(f)
 
 # setup module thingy
 from module_interface import ModuleController
@@ -105,27 +115,31 @@ def chat_sender():
 
 
 def deal_with_message(msg):
+    global flags, banned
     msg = str(msg)
     if msg == "":
         return
     if not "SharpFloof:" in msg:
-        # check for join/leave
-        welcome_check:re.Match = re.search(r"^(.*) joined the ship.$", msg)
-        if welcome_check:
-            chat_queue.put(f"Welcome, {welcome_check.group(0)[:-17]}")
-            return
-        goodbye_check:re.Match = re.search(r"^(.*) left the ship.$", msg)
-        if goodbye_check:
-            chat_queue.put(f"Goodbye, {goodbye_check.group(0)[:-15]}")
-            return
+        if flags["do_join_msg"]:
+            # check for join/leave
+            welcome_check:re.Match = re.search(r"^(.*) joined the ship.$", msg)
+            if welcome_check:
+                chat_queue.put(f"Welcome, {welcome_check.group(0)[:-17]}")
+                return
+            goodbye_check:re.Match = re.search(r"^(.*) left the ship.$", msg)
+            if goodbye_check:
+                chat_queue.put(f"Goodbye, {goodbye_check.group(0)[:-15]}")
+                return
     parts = msg.split(":", 1)
     if len(parts) > 1:
         logger.detail("dealing with chat")
-        author: re.Match = re.search(r"(((\[Captain\] )|(\[Crew\] ))?)(\w+)", parts[0])
+        author: re.Match = re.search(r"(((\[Captain\] )|(\[Crew\] ))?)(#?\w+)", parts[0])
         if author is not None:
             author = author.group(5)
         else:
             logger.critical("could not match authors name!")
+        if author in banned:
+            return
         content = parts[1][1:]
         if content == "good bot":
             chat_queue.put(":)")
@@ -152,6 +166,50 @@ def deal_with_message(msg):
                         driver.close()
                         logger.info("exiting")
                         sys.exit(10)
+                if content == "reload data":
+                    if "SharpFloof" in author:
+                        with banned_path.open("r") as f:
+                            banned = json.load(f)
+
+                        with flag_path.open("r") as f:
+                            flags = json.load(f)
+                        chat_queue.put("reloaded data")
+                        return
+                if content.startswith("ban"):
+                    if "SharpFloof" in author:
+                        args = content.split(" ")
+                        if len(args) == 2:
+                            with banned_path.open("r") as f:
+                                banned = json.load(f)
+                            banned.append(args[1])
+                            with banned_path.open("w") as f:
+                                json.dump(banned, f, indent=2)
+                            chat_queue.put(f"{args[1]} was banned!")
+                        else:
+                            chat_queue.put('must include person to ban!')
+                        return
+                    else:
+                        chat_queue.put("you cannot ban people!")
+                        return
+                if content.startswith("unban"):
+                    if "SharpFloof" in author:
+                        args = content.split(" ")
+                        if len(args) == 2:
+                            with banned_path.open("r") as f:
+                                banned = json.load(f)
+                            try:
+                                banned.remove(args[1])
+                            except ValueError:
+                                chat_queue.put(f"{args[1]} is not banned!")
+                            with banned_path.open("w") as f:
+                                json.dump(banned, f, indent=2)
+                            chat_queue.put(f"{args[1]} was banned!")
+                        else:
+                            chat_queue.put('must include person to ban!')
+                        return
+                    else:
+                        chat_queue.put("you cannot ban people!")
+                        return
                 logger.debug("running interpret")
                 sucsess = mc.interpet(author, content)
                 if not sucsess:
