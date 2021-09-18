@@ -1,5 +1,5 @@
 import pathlib
-import os, sys
+import sys
 import dill
 import gzip
 import yaml
@@ -12,13 +12,13 @@ sys.path.append(main_path)
 
 with open(index_path,'r') as f:
     modules_index = list(yaml.safe_load_all(f))
-    modules = modules_index[0]['modules_gen']
+    modules = modules_index[0]['bin_mod_src']
 
 imported = []
 if modules is not None:
     for module in modules:
         try:
-            imported.append(importlib.import_module(f"bot.modules.{module}_cogg"))
+            imported.append(importlib.import_module(f"bot.modules.src.{module}_cogg"))
         except ImportError as e:
             print(f"failed to import {module} because of {e}")
     print(f"imported {imported}")
