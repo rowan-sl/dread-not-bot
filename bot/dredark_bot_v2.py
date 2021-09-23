@@ -14,7 +14,7 @@ from lib.customlog import CustomLoggerLevels
 logging.setLoggerClass(CustomLoggerLevels)
 logging.basicConfig(
     filename=log_path,
-    level=logging.INFO,#detail level
+    level=15,#detail level
     format="[%(asctime)s] %(name)s/%(module)s/%(levelname)s: %(message)s",
     datefmt="%H:%M:%S",
 )
@@ -72,6 +72,18 @@ with flag_path.open("r") as f:
 from module_interface import ModuleController
 mc = ModuleController(logger, chat_queue)
 
+# unused
+action_key_down_w = ActionChains(driver).key_down("w")
+action_key_up_w = ActionChains(driver).key_up("w")
+action_key_down_a = ActionChains(driver).key_down("a")
+action_key_up_a = ActionChains(driver).key_up("a")
+action_key_down_s = ActionChains(driver).key_down("s")
+action_key_up_s = ActionChains(driver).key_up("s")
+action_key_down_d = ActionChains(driver).key_down("d")
+action_key_up_d = ActionChains(driver).key_up("d")
+space_down = ActionChains(driver).key_down(Keys.SPACE)
+space_up = ActionChains(driver).key_up(Keys.SPACE)
+
 def sendchat(msg):
     logger.detail("sending chat")
     logger.detail(msg)
@@ -87,30 +99,47 @@ def sendchat(msg):
         print("message to long!")
         logger.warning("message to long to send")
 
-
 def chat_sender():
     logger.detail("sender running")
     while True:
         time.sleep(1.1)
         msg = chat_queue.get()
-        if msg is None:
-            logger.detail("recieved kill msg")
-            while True:
-                try:
-                    chat_queue.task_done()
-                except ValueError:
-                    break
-            logger.detail("exiting loop")
-            break
-        logger.detail("got new message to say")
-        if len(msg) < 300:
-            sendchat(msg)
-        else:
-            n = 299
-            chunks = [msg[i:i+n] for i in range(0, len(msg), n)]
-            for chunk in chunks:
-                time.sleep(1.1)
-                sendchat(chunk)
+        if type(msg) is str:
+            if msg is None:
+                logger.detail("recieved kill msg")
+                while True:
+                    try:
+                        chat_queue.task_done()
+                    except ValueError:
+                        break
+                logger.detail("exiting loop")
+                break
+            logger.detail("got new message to say")
+            if len(msg) < 300:
+                sendchat(msg)
+            else:
+                n = 299
+                chunks = [msg[i:i+n] for i in range(0, len(msg), n)]
+                for chunk in chunks:
+                    time.sleep(1.1)
+                    sendchat(chunk)
+        elif type(msg) is dict:
+            if "move" in msg.keys():
+                movements = msg["move"]
+                for action in movements:
+                    direction = action[0]
+                    duration = action[1]
+                    if direction == "w": action_key_down_w.perform()
+                    elif direction == "a": action_key_down_a.perform()
+                    elif direction == "s": action_key_down_s.perform()
+                    elif direction == "d": action_key_down_d.perform()
+                    elif direction == "sp": space_down.perform()
+                    time.sleep(duration)
+                    if direction == "w": action_key_up_w.perform()
+                    elif direction == "a": action_key_up_a.perform()
+                    elif direction == "s": action_key_up_s.perform()
+                    elif direction == "d": action_key_up_d.perform()
+                    elif direction == "sp": space_up.perform()
         chat_queue.task_done()
 
 

@@ -24,3 +24,4 @@ class BuiltinCogg:
             return True
 
 module_coggs = [BuiltinCogg]
+

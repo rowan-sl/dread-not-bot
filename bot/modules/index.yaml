@@ -1,17 +1,7 @@
 #modules must be named "<name>_cogg.py" where <name> is what u put here and _cogg is because dredark is made by cogg
 # they go in the modules directory
-py_modules:
-  # - debug
-  # - builtin
-  # - math
-  # - iteminfo
-  # - lol
-  # - oracle
-  # - tag
-  # - random
-#in the bin dir, go modules that have been serialized with dill and compressed w/ gzip
-#can include modules that are just the bin file
-bin_modules:
+modules:
+  - movement
   - debug
   - builtin
   - math
@@ -20,13 +10,4 @@ bin_modules:
   - oracle
   - tag
   - random
-#names of all modules to generate bin modules off of, they go in the src directory
-bin_mod_src:
-  - debug
-  - builtin
-  - math
-  - iteminfo
-  - lol
-  - oracle
-  - tag
-  - random
+
