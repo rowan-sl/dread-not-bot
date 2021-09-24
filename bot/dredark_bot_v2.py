@@ -260,7 +260,6 @@ while kill == 0:
     current_chat = chat.find_elements(By.XPATH, "./*")
     current_chat = current_chat[msges_len:]
     msges_len += len(current_chat)
-    print()
     if len(current_chat) > 0:
         for msg in current_chat:
             logger.detail(f"new msg:{msg.get_property('textContent')}")
