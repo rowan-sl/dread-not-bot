@@ -248,7 +248,7 @@ def deal_with_message(msg):
                 logger.detail("no command")
                 chat_queue.put("please type a command")
     
-old_msges = []
+msges_len = 0
 
 sender_thread = threading.Thread(target=chat_sender)
 sender_thread.start()
@@ -258,8 +258,9 @@ while kill == 0:
     time.sleep(0.5)
     chat = driver.find_element_by_css_selector("#chat-content")
     current_chat = chat.find_elements(By.XPATH, "./*")
-    current_chat = current_chat[len(old_msges):]
-    old_msges += current_chat
+    current_chat = current_chat[msges_len:]
+    msges_len += len(current_chat)
+    print()
     if len(current_chat) > 0:
         for msg in current_chat:
             logger.detail(f"new msg:{msg.get_property('textContent')}")
