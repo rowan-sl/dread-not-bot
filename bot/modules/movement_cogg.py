@@ -1,10 +1,11 @@
 class MovementCogg:
+    from config.conf import owner_username
     def __init__(self) -> None:
         pass
     
     def check(self, author, content, chat_queue, logger):
         if content.startswith("move"):
-            if "SharpFloof" in author:
+            if self.owner_username in author:
                 #chat_queue.put({"move": [("w", 1.0),("a", 1.0), ("s", 1.0), ("d", 1.0)]})
                 parts = content[4:].split(" ")[1:]
                 if (len(parts) % 2) != 0:

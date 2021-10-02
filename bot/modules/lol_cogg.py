@@ -34,9 +34,5 @@ class LolCogg:
         if content.startswith("sussy"):
             chat_queue.put("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
             return True
-        if content == "haters":
-            chat_queue.put("List of ppl who hate the bot :( they mean")
-            chat_queue.put("Amin")
-            return True
 
 module_coggs = [LolCogg]

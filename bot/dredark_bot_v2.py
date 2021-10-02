@@ -148,7 +148,7 @@ def deal_with_message(msg):
     msg = str(msg)
     if msg == "":
         return
-    if not "SharpFloof:" in msg:
+    if not f"{owner_username}:" in msg:
         if flags["do_join_msg"]:
             # check for join/leave
             welcome_check:re.Match = re.search(r"^(.*) joined the ship.$", msg)
@@ -179,7 +179,7 @@ def deal_with_message(msg):
             content = content[len(prefix):]
             if content != "":
                 if content.startswith("shutdown"):
-                    if "SharpFloof" in author:
+                    if owner_username in author:
                         chat_queue.put("Goodbye")
                         logger.info("Shutting down")
                         print("shutting down")
@@ -196,7 +196,7 @@ def deal_with_message(msg):
                         logger.info("exiting")
                         sys.exit(10)
                 if content == "reload data":
-                    if "SharpFloof" in author:
+                    if owner_username in author:
                         with banned_path.open("r") as f:
                             banned = json.load(f)
 
@@ -205,7 +205,7 @@ def deal_with_message(msg):
                         chat_queue.put("reloaded data")
                         return
                 if content.startswith("ban"):
-                    if "SharpFloof" in author:
+                    if owner_username in author:
                         args = content.split(" ")
                         if len(args) == 2:
                             with banned_path.open("r") as f:
@@ -221,7 +221,7 @@ def deal_with_message(msg):
                         chat_queue.put("you cannot ban people!")
                         return
                 if content.startswith("unban"):
-                    if "SharpFloof" in author:
+                    if owner_username in author:
                         args = content.split(" ")
                         if len(args) == 2:
                             with banned_path.open("r") as f:
