@@ -232,7 +232,7 @@ def deal_with_message(msg):
                                 chat_queue.put(f"{args[1]} is not banned!")
                             with banned_path.open("w") as f:
                                 json.dump(banned, f, indent=2)
-                            chat_queue.put(f"{args[1]} was banned!")
+                            chat_queue.put(f"{args[1]} was unbanned")
                         else:
                             chat_queue.put('must include person to ban!')
                         return
