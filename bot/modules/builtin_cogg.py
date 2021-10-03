@@ -22,6 +22,9 @@ class BuiltinCogg:
         if content == "help":
             chat_queue.put(f"run {self.prefix}info for info or {self.prefix}commands for commands")
             return True
+        if ((content == "source") or (content=="src")):
+            chat_queue.put("bot source: github dot com/rowan-sl/dread-not-bot")
+            return True
 
 module_coggs = [BuiltinCogg]
 
